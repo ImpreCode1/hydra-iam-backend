@@ -1,3 +1,12 @@
+/**
+ * Estrategia Passport para login con Microsoft Entra ID (OIDC).
+ *
+ * - Usa flujo authorization code (responseType: 'code')
+ * - Guarda state/nonce en cookies (useCookieInsteadOfSession) para evitar express-session
+ * - Requiere: AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_REDIRECT_URI
+ * - Opcional: COOKIE_ENCRYPTION_KEY (32 chars), COOKIE_ENCRYPTION_IV (12 chars)
+ * - validate: extrae azureOid, email, name del perfil y los pasa a AuthService
+ */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';

@@ -1,3 +1,12 @@
+/**
+ * Módulo de autenticación.
+ *
+ * Incluye:
+ * - Login con Microsoft Entra ID (OIDC)
+ * - JWT para proteger rutas (AuthGuard 'jwt')
+ *
+ * Rutas: /auth/microsoft/login, /auth/microsoft/callback, /auth/callback, /auth/me
+ */
 /* eslint-disable @typescript-eslint/require-await */
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';

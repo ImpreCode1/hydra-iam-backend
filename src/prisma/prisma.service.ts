@@ -1,3 +1,9 @@
+/**
+ * Servicio de base de datos con Prisma.
+ * Extiende PrismaClient con adaptador pg para PostgreSQL.
+ * Verifica conexión al iniciar (SELECT 1).
+ * @requires DATABASE_URL
+ */
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';

@@ -1,3 +1,11 @@
+/**
+ * Módulo raíz de la aplicación Hydra IAM.
+ *
+ * Configura:
+ * - ConfigModule: variables de entorno (.env)
+ * - PrismaModule: conexión a PostgreSQL
+ * - AuthModule: autenticación (Microsoft SSO + JWT)
+ */
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 

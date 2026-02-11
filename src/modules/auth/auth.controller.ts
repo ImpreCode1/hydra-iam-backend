@@ -1,3 +1,12 @@
+/**
+ * Controlador de autenticación.
+ *
+ * Rutas:
+ * - GET /auth/microsoft/login  → Inicia login con Microsoft
+ * - GET /auth/microsoft/callback → Callback de Microsoft (redirige con token)
+ * - GET /auth/callback         → Página de confirmación con token
+ * - GET /auth/me               → Datos del usuario (requiere JWT)
+ */
 import {
   Controller,
   Get,

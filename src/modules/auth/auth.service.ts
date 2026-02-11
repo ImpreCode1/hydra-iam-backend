@@ -1,3 +1,7 @@
+/**
+ * Servicio de autenticación.
+ * loginWithMicrosoft: busca/crea usuario, genera JWT, devuelve token + user (sin password).
+ */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';

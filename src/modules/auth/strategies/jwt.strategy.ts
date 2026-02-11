@@ -1,5 +1,12 @@
+/**
+ * Estrategia Passport para validar JWT.
+ *
+ * - Lee el token del header Authorization: Bearer <token>
+ * - Valida con JWT_SECRET
+ * - El payload debe tener: sub, email, name?, roles?
+ * - Devuelve { id, email, name, roles } para req.user
+ */
 /* eslint-disable @typescript-eslint/require-await */
-
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';

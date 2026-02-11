@@ -1,3 +1,12 @@
+/**
+ * Servicio de usuarios.
+ *
+ * findOrCreateFromMicrosoft:
+ * - Busca usuario por azureOid o email
+ * - Si existe sin azureOid, actualiza con azureOid
+ * - Si no existe, crea usuario SSO (sin password/position)
+ * - Incluye roles con { role: { name } } y position
+ */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { MicrosoftUser } from '../auth/interfaces/microsoft-user.interface';
