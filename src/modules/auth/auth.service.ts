@@ -1,6 +1,6 @@
 /**
  * Servicio de autenticación.
- * loginWithMicrosoft: busca/crea usuario, genera JWT, devuelve token + user (sin password).
+ * loginWithMicrosoft: busca/crea usuario, genera JWT con roles y cargo, devuelve token + user (sin password).
  */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
@@ -27,6 +27,14 @@ export class AuthService {
       email: user.email,
       name: user.name,
       roles: roleNames,
+      positionId: user.positionId ?? null,
+      position: user.position
+        ? {
+            id: user.position.id,
+            name: user.position.name,
+            description: user.position.description ?? null,
+          }
+        : null,
     };
 
     // Excluir password del objeto user en la respuesta

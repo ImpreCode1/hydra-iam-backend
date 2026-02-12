@@ -3,8 +3,8 @@
  *
  * - Lee el token del header Authorization: Bearer <token>
  * - Valida con JWT_SECRET
- * - El payload debe tener: sub, email, name?, roles?
- * - Devuelve { id, email, name, roles } para req.user
+ * - El payload debe tener: sub, email, name?, roles?, positionId?, position?
+ * - Devuelve { id, email, name, roles, positionId, position } para req.user
  */
 /* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
@@ -29,12 +29,20 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     email: string;
     name?: string;
     roles?: string[];
+    positionId?: string | null;
+    position?: {
+      id: string;
+      name: string;
+      description?: string | null;
+    } | null;
   }) {
     return {
       id: payload.sub,
       email: payload.email,
       name: payload.name,
       roles: payload.roles ?? [],
+      positionId: payload.positionId ?? null,
+      position: payload.position ?? null,
     };
   }
 }
