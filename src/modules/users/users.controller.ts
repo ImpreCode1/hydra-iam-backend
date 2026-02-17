@@ -10,7 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { Roles } from '../auth/guards/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/JwtAuthGuard.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { RolesGuard } from '../auth/guards/Roles.guard';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')

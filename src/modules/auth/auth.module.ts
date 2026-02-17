@@ -22,7 +22,7 @@ import { MicrosoftAuthGuard } from './guards/microsoft-auth.guard';
 
 import { UsersModule } from '../users/users.module';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesGuard } from './guards/Roles.guard';
 
 @Module({
   imports: [
@@ -31,7 +31,8 @@ import { RolesGuard } from './guards/roles.guard';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret:
-          configService.get<string>('JWT_SECRET') ?? 'change-me-in-production',
+          configService.get<string>('JWT_SECRET') ??
+          'fallback-secret-change-in-prod',
         signOptions: { expiresIn: '15m' },
       }),
       inject: [ConfigService],

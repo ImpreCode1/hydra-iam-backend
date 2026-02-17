@@ -50,11 +50,21 @@ export class AuthController {
   @Get('microsoft/callback')
   async microsoftCallback(
     @Request() req: RequestWithUser,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.authService.loginWithMicrosoft(req.user);
+
     const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:3000';
-    res.redirect(`${frontendUrl}/auth/callback?token=${accessToken}`);
+
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    // 🚀 Solo redirigir, SIN token en URL
+    res.redirect(frontendUrl);
   }
 
   /**
