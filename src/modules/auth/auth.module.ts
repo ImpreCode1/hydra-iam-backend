@@ -22,7 +22,7 @@ import { MicrosoftAuthGuard } from './guards/microsoft-auth.guard';
 
 import { UsersModule } from '../users/users.module';
 import { JwtAuthGuard } from './guards/JwtAuthGuard.guard';
-import { RolesGuard } from './guards/Roles.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
