@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/JwtAuthGuard.guard';
 import { PlatformsService } from './platforms.service';
@@ -9,7 +11,7 @@ export class PlatformsAccessController {
 
   @Get('me/access')
   getMyPlatforms(@Request() req: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-    return this.platformsService.getAccessiblePlatforms(req.user.sub);
+    console.log(req.user);
+    return this.platformsService.getAccessiblePlatforms(req.user.id);
   }
 }

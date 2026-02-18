@@ -57,6 +57,9 @@ export class UsersService {
       },
     });
 
+    // =========================
+    // USUARIO YA EXISTE
+    // =========================
     if (existingUser) {
       if (!existingUser.isActive || existingUser.deletedAt) {
         throw new UnauthorizedException('Usuario desactivado');
@@ -87,7 +90,10 @@ export class UsersService {
       return existingUser as UserWithRoles;
     }
 
-    return this.prisma.user.create({
+    // =========================
+    // USUARIO NUEVO
+    // =========================
+    const newUser = await this.prisma.user.create({
       data: {
         name: msUser.name,
         email: msUser.email,
@@ -95,11 +101,39 @@ export class UsersService {
         positionId,
         isActive: true,
       },
+    });
+
+    // 🔥 Buscar rol USER
+    const defaultRole = await this.prisma.role.findUnique({
+      where: { name: 'USER' },
+    });
+
+    if (defaultRole) {
+      await this.prisma.userRole.upsert({
+        where: {
+          userId_roleId: {
+            userId: newUser.id,
+            roleId: defaultRole.id,
+          },
+        },
+        update: {},
+        create: {
+          userId: newUser.id,
+          roleId: defaultRole.id,
+        },
+      });
+    }
+
+    // 🔥 Retornar usuario con roles incluidos
+    const userWithRoles = await this.prisma.user.findUnique({
+      where: { id: newUser.id },
       include: {
         roles: { include: { role: true } },
         position: true,
       },
     });
+
+    return userWithRoles as UserWithRoles;
   }
 
   async findAll() {
