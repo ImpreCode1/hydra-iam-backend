@@ -23,9 +23,16 @@ import type { Request as ExpressRequest, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { MicrosoftUser } from './interfaces/microsoft-user.interface';
+import { ProfileWithAccessResponseDto } from './dto/profile-with-access.dto';
 
-interface RequestWithUser extends ExpressRequest {
+interface RequestWithMicrosoftUser extends ExpressRequest {
   user: MicrosoftUser;
+}
+
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+
+interface RequestWithJwtUser extends ExpressRequest {
+  user: JwtPayload;
 }
 
 @Controller('auth')
@@ -49,7 +56,7 @@ export class AuthController {
   @UseGuards(MicrosoftAuthGuard)
   @Get('microsoft/callback')
   async microsoftCallback(
-    @Request() req: RequestWithUser,
+    @Request() req: RequestWithMicrosoftUser,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.authService.loginWithMicrosoft(req.user);
@@ -112,7 +119,9 @@ export class AuthController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('me')
-  me(@Request() req: RequestWithUser) {
-    return req.user;
+  async me(
+    @Request() req: RequestWithJwtUser,
+  ): Promise<ProfileWithAccessResponseDto> {
+    return this.authService.getProfileWithAccess(req.user.id);
   }
 }

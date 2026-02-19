@@ -6,6 +6,8 @@ import {
   Body,
   NotFoundException,
   UseGuards,
+  Post,
+  Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Roles } from '../auth/guards/roles.decorator';
@@ -49,5 +51,19 @@ export class UsersController {
   @Get(':id/roles')
   async getRoles(@Param('id') id: string) {
     return this.usersService.resolveEffectiveRoles(id);
+  }
+
+  @Post(':id/roles/:roleId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  assignRole(@Param('id') userId: string, @Param('roleId') roleId: string) {
+    return this.usersService.assignRole(userId, roleId);
+  }
+
+  @Delete(':id/roles/:roleId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  removeRole(@Param('id') userId: string, @Param('roleId') roleId: string) {
+    return this.usersService.removeRole(userId, roleId);
   }
 }

@@ -8,7 +8,12 @@
  * - Sincroniza cargo desde Azure AD (jobTitle)
  * - Incluye roles con { role: { name } } y position
  */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MicrosoftUser } from '../auth/interfaces/microsoft-user.interface';
 import { PositionsService } from '../positions/positions.service';
@@ -193,5 +198,45 @@ export class UsersService {
     const positionRoles = user.position?.roles.map((r) => r.role.name) ?? [];
 
     return [...new Set([...directRoles, ...positionRoles])];
+  }
+
+  async assignRole(userId: string, roleId: string) {
+    // Validar que usuario exista
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    // Validar que rol exista
+    const role = await this.prisma.role.findUnique({
+      where: { id: roleId },
+    });
+
+    if (!role) {
+      throw new NotFoundException('Rol no encontrado');
+    }
+
+    // Crear relación (evita duplicado por PK compuesta)
+    try {
+      return await this.prisma.userRole.create({
+        data: { userId, roleId },
+      });
+    } catch {
+      throw new BadRequestException('El usuario ya tiene este rol');
+    }
+  }
+
+  async removeRole(userId: string, roleId: string) {
+    return this.prisma.userRole.delete({
+      where: {
+        userId_roleId: {
+          userId,
+          roleId,
+        },
+      },
+    });
   }
 }
